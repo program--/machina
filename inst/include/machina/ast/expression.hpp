@@ -43,6 +43,11 @@ class variable_node : public expression_node
     template<typename T>
     variable_node(T&& name)
       : m_identifier(std::forward<T>(name)){};
+
+    const std::string& identifier() const noexcept
+    {
+        return this->m_identifier;
+    }
 };
 
 class binary_op_node : public expression_node
@@ -59,6 +64,18 @@ class binary_op_node : public expression_node
       : m_op(op)
       , m_lhs(std::move(lhs))
       , m_rhs(std::move(rhs)){};
+
+    const std::unique_ptr<expression_node>& lhs() const noexcept
+    {
+        return this->m_lhs;
+    }
+
+    const std::unique_ptr<expression_node>& rhs() const noexcept
+    {
+        return this->m_rhs;
+    }
+
+    char op() const noexcept { return this->m_op; }
 };
 
 class call_node : public expression_node
@@ -71,6 +88,9 @@ class call_node : public expression_node
     call_node(CharCall&& call, Args&& args)
       : m_call(std::forward<CharCall>(call))
       , m_args(std::forward<Args>(args)){};
+
+    const std::string& caller() const noexcept { return this->m_call; }
+    const auto&        args() const noexcept { return this->m_args; }
 };
 
 } // namespace ast
